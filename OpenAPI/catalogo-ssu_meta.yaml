@@ -1701,7 +1701,7 @@ paths:
 
       responses:
         "200":
-          description: Elenco dei procedimenti richiesti
+          description: Elenco dei sportelli richiesti
           content:
             application/json:
               schema:
@@ -1765,7 +1765,7 @@ paths:
 
       responses:
         "200":
-          description: Elenco SUAP richiesto
+          description: Elenco sportelli richiesti
           content:
             application/json:
               schema:
