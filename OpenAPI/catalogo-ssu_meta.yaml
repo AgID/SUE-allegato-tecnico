@@ -67,6 +67,7 @@ paths:
                     - typology
                     - lifeevent
                     - municipality
+                    - context
                   properties:
                     typology:
                       description: tipologia del procedimento (es. esercizio di vicinato, grande/media struttura di vendita)
@@ -77,6 +78,12 @@ paths:
                     municipality:
                       description: identificativo del comune per cui la coppia  {typology,lifeevent} esiste per almeno un procedimento afferente afferente al comune
                       type: string
+                    context:
+                      description: contesto di riferimento (es. SUAP, SUE)
+                      type: string
+                      enum: 
+                        - SUAP
+                        - SUE
 
           headers:
             Agid-JWT-Signature:
