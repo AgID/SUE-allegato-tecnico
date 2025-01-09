@@ -1598,7 +1598,7 @@ paths:
       tags:
         - Bulk
 
-  /single_desks-by-id/{id_single_desk_list}/{context}: 
+  /single_desks-by-id/{id_single_desk_list}: #NO CONTEXT
     get:
       description: |
         Recupero bulk elenco sportelli (tutte le versioni) per una lista di identificativi sportelli
@@ -1612,17 +1612,7 @@ paths:
             items:
               type: string
           style: simple
-        - in: path
-          name: context
-          description: contesto di riferimento (es. SUAP, SUE)
-          required: true
-          schema:
-            type: string
-            default: "SUAP"
-            enum:
-                - SUAP
-                - SUE  
-
+        
       responses:
         "200":
           description: Elenco sportelli richiesti
