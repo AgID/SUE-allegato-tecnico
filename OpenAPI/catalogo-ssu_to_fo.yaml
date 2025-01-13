@@ -1,12 +1,12 @@
 openapi: 3.0.3
 
 info:
-  title: CatalogoSSU to FrontOffice
+  title: CatalogoSSU to FrontOffice SUE
 
   version: 1.0.0
 
   description: |-
-    API rese disponibili da Catalogo SSU alle componenti FrontOffice'
+    API rese disponibili da Catalogo SSU alle componenti FrontOffice SUE
 
   contact:
     name: AgID - Agenzia per l'Italia Digitale
@@ -18,7 +18,7 @@ info:
 
 servers:
   - url: https://<system host+subdomains>.it
-    description: Catalogo SSU to FrontOffice endpoint
+    description: Catalogo SSU to FrontOffice SUE endpoint
 
 paths:
   /request_cui:
