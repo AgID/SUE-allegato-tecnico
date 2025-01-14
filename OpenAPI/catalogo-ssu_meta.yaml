@@ -78,9 +78,6 @@ paths:
                     context:
                       description: contesto di riferimento (es. SUAP, SUE)
                       type: string
-                      enum: 
-                        - SUAP
-                        - SUE
 
           headers:
             Agid-JWT-Signature:
@@ -1918,9 +1915,6 @@ components:
             context:
               title: contesto di riferimento
               type: string
-              enum:
-                - SUAP
-                - SUE
       example:
         id: 1
         version: 1.0.0
@@ -2110,9 +2104,6 @@ components:
             context:
               title: contesto di riferimento (SUAP, SUE)
               type: string
-              enum: 
-                - SUAP
-                - SUE
       example:
         id: 1
         version: 1.0.0
@@ -2122,7 +2113,6 @@ components:
         territorial_scope: 00000000
         status: Active
         context: SUAP
-
 
     UseCaseProceeding:
       allOf:
@@ -2140,9 +2130,6 @@ components:
             proceeding_context:
               title: contesto di riferimento (SUAP, SUE)
               type: string
-              enum: 
-                - SUAP
-                - SUE
             schematron_phase:
               type: string
 
