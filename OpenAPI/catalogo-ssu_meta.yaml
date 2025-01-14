@@ -45,14 +45,11 @@ paths:
             type: string
         - in: path
           name: context
-          description: contesto di riferimento (es. SUAP, SUE)
+          description: contesto di riferimento. I valori ammissibili sono riportati all'interno del file ContextValues
           required: true
           schema:
             type: string
             default: "SUAP"
-            enum:
-                - SUAP
-                - SUE
 
       responses:
         "200":
@@ -133,14 +130,11 @@ paths:
             type: string
         - in: path
           name: context
-          description: contesto di riferimento (es. SUAP, SUE)
+          description: contesto di riferimento. I valori ammissibili sono riportati all'interno del file ContextValues
           required: true
           schema:
             type: string
             default: "SUAP"
-            enum:
-                - SUAP
-                - SUE
 
       responses:
         "200":
@@ -722,14 +716,11 @@ paths:
             type: string
         - in: path
           name: context
-          description: contesto di riferimento (es. SUAP, SUE)
+          description: contesto di riferimento. I valori ammissibili sono riportati all'interno del file ContextValues
           required: true
           schema:
             type: string
             default: "SUAP"
-            enum:
-                - SUAP
-                - SUE
 
       responses:
         "200":
@@ -874,14 +865,11 @@ paths:
           style: simple
         - in: path
           name: context
-          description: contesto di riferimento (es. SUAP, SUE)
+          description: contesto di riferimento. I valori ammissibili sono riportati all'interno del file ContextValues
           required: true
           schema:
             type: string
             default: "SUAP"
-            enum:
-                - SUAP
-                - SUE
 
       responses:
         "200":
@@ -1135,7 +1123,7 @@ paths:
       tags:
         - Bulk
 
-  /usecase-proceedings-endoproceedings/{id_usecase_proceeding_list}: #NO CONTEXT
+  /usecase-proceedings-endoproceedings/{id_usecase_proceeding_list}/{context}: 
     get:
       description: |
          Recupero bulk tuple {fattispecie,fattispecie,obbligatorio}(tutte le versioni)(tutte le versioni) per una lista di identificativi procedimento
@@ -1149,6 +1137,13 @@ paths:
             items:
               type: string
           style: simple
+        - in: path
+          name: context
+          description: contesto di riferimento. I valori ammissibili sono riportati all'interno del file ContextValues
+          required: true
+          schema:
+            type: string
+            default: "SUAP"
         
       responses:
         "200":
@@ -1557,14 +1552,11 @@ paths:
           style: simple
         - in: path
           name: context
-          description: contesto di riferimento (es. SUAP, SUE)
+          description: contesto di riferimento. I valori ammissibili sono riportati all'interno del file ContextValues
           required: true
           schema:
             type: string
             default: "SUAP"
-            enum:
-                - SUAP
-                - SUE
 
       responses:
         "200":
