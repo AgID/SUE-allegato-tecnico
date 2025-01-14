@@ -1,0 +1,584 @@
+openapi: 3.0.3
+
+info:
+  title: CatalogoSSU to EnteTerzo SUE
+
+  version: 1.0.0
+
+  description: |-
+    API rese disponibili da Catalogo SSU alle componenti EnteTerzo SUE
+
+  contact:
+    name: AgID - Agenzia per l'Italia Digitale
+    url: https://www.agid.gov.it/
+
+  license:
+    name: CC BY-NC-SA 4.0
+    url: https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+servers:
+  - url: https://<system host+subdomains>.it
+    description: Catalogo SSU to EnteTerzo SUE endpoint
+
+paths:
+  /instance_descriptor/{cui_uuid}:
+    description: Recupero descrittore istanza
+    get:
+      parameters:
+        - name: cui_uuid
+          in: path
+          description: UUID del CUI
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          $ref: "#/components/responses/OKInstanceDescriptor"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/ServerError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavaliable"
+
+      security:
+        - bearerAuth: []
+          Agid-JWT-Signature: []
+
+  /audit:
+    description: Audit azioni realizzate dalle componenti
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuditMessage"
+        required: true
+
+      responses:
+        "200":
+          $ref: "#/components/responses/OKAuditResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/ServerError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavaliable"
+
+      security:
+        - bearerAuth: []
+          Agid-JWT-Signature: []
+
+components:
+  responses:
+    OKInstanceDescriptor:
+      description: "Instance Descriptor"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/InstanceDescriptor"
+      headers:
+        Agid-JWT-Signature:
+          $ref: "#/components/headers/Agid-JWT-Signature"
+    OKRequest:
+      description: Richiesta completata con successo
+      headers:
+        Agid-JWT-Signature:
+          $ref: "#/components/headers/Agid-JWT-Signature"
+    
+    OKAuditResponse:
+      description: Richiesta di Audit completata con successo
+      headers:
+        Agid-JWT-Signature:
+          $ref: "#/components/headers/Agid-JWT-Signature"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/AuditResponse"
+
+    BadRequest:
+      description: Forma della richiesta non conforme alla specifica
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+      headers:
+        Agid-JWT-Signature:
+          $ref: "#/components/headers/Agid-JWT-Signature"
+    ServiceUnavaliable:
+      description: Servizio non disponibile
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+      headers:
+        Agid-JWT-Signature:
+          $ref: "#/components/headers/Agid-JWT-Signature"
+
+    Unauthorized:
+      description: Richiesta non autorizzata
+      headers:
+        Agid-JWT-Signature:
+          $ref: "#/components/headers/Agid-JWT-Signature"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    ServerError:
+      description: Errore processamento richiesta
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+      headers:
+        Agid-JWT-Signature:
+          $ref: "#/components/headers/Agid-JWT-Signature"
+
+  schemas:
+    cui:
+      type: object
+      description: codice unico dell'istanza
+      required:
+          - context
+          - data
+          - progressive
+          - uuid
+      properties:
+          context:
+              title: contesto dell'istanza
+              type: string
+          data:
+              title: data emissione cui
+              type: string
+              format: date
+          
+          progressivo:
+              title: numero progressivo a rotazione annuale
+              type: string
+
+          uuid:
+              title: UUID chiave del CUI
+              type: string
+    Error:
+      type: object
+      description: codice e descrizione condizione di errore
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message
+    AuditMessage:
+      type: object
+
+      required:
+        - cui
+        - message
+        - event_time
+
+      properties:
+        cui:
+          $ref: "#/components/schemas/cui"
+
+        message:
+          type: string
+          pattern: ^instance_retrived|integration_requested_from_[0-9]{1,10}|instance_integrated_retrived|cdss_requested_from_[0-9]{1,10}|outcome_sended_from_[0-9]{1,10}|retry_requested_for_send_instance|retry_requested_for_notify$
+
+        event_time:
+          title: timestamp del momento in cui si è verificato l'evento
+          type: string
+          format: date-time
+
+    AuditResponse:
+      type: object
+      description: risposta audit
+      required:
+        - type
+      properties:
+        type:
+          title: tipo messaggio
+          type: string
+          enum:
+            - ok
+            - out_of_flow
+            - expected_time_exceeded
+        message:
+          title: messaggio
+          type: string
+    
+    Times:
+      description: tempi amministrativi dell'istanza
+      type: object
+      required:
+      - start
+      - max_gg_proc
+      properties:
+        start:
+          title: data avvio dell'istanza
+          type: string
+          format: date
+        max_gg_proc:          
+          title: numero di giorni limite a partire da start entro cui l'istanza deve concludersi
+          type: integer
+          format: int32
+        max_gg_correction:
+          title: numero di giorni limite a partire da start per la correzione a valle di un controllo formale
+          type: integer
+          format: int32
+        max_gg_admissibility:          
+          title: numero di giorni limite a partire da start per la verifica di ammissibilità
+          type: integer
+          format: int32
+        max_gg_int_req:          
+          title: numero di giorni limite a partire da start per la richiesta di integrazione degli enti terzi
+          type: integer
+          format: int32
+        max_gg_int_resp:          
+          title: numero di giorni limite a partire da start per integrazione del soggetto presentatore
+          type: integer
+          format: int32
+        max_gg_concl_send:          
+          title: numero di giorni limite a partire da start per inoltro delle conclusioni degli enti terzi
+          type: integer
+          format: int32
+        max_gg_cdss_req:          
+          title: numero di giorni limite a partire da start entro cui gli enti terzi possono richiedere conferenza di servizi sincrona
+          type: integer
+          format: int32
+        date_cdss:
+          title: data evetuale conferenza di servizi sincrona
+          type: string
+          format: date
+    
+    AdministrationSchema:
+      description: Amministrazione compentente censita nel Catalogo SSU
+      type: object
+      required:
+        - ipacode
+        - officecode
+        - version
+        - description
+      properties:
+        ipacode:
+          title: codice IPA dell'amministrazione
+          type: string
+          minLength: 1
+        officecode:
+          title: codice dell'ufficio dell'amministrazione 
+          type: string
+          minLength: 1
+        version:
+          title: versione dell'ufficio dell'amministrazione 
+          type: string
+          pattern: "[0-9]{2}.[0-9]{2}.[0-9]{2}"
+        description:
+            title: descrizione dell'amministrazione
+            type: string
+
+    InstanceDescriptor:
+      description: descrittore istanza
+      type: object
+      required:
+      - version
+      - municipality
+      - usecase_proceedings
+      properties:
+        version:          
+          title: numero versione del descrittore
+          type: integer
+        
+        cui:          
+          "$ref": "#/components/schemas/cui"
+        
+        municipality:          
+          title: codice istat 6 cifre del comune in cui l'istanza è stata presentata
+          type: string
+          pattern: "^[0-9]{6}$"        
+        
+        legal_person:          
+          title: codice fiscale persona giuridica
+          type: string
+          pattern: "^[0-9]{11}|^[A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST][0-9LMNPQRSTUV]{2}[A-Z][0-9LMNPQRSTUV]{3}[A-Z]$"
+        
+        instance_status:          
+          title: stato dell'istanza
+          type: array
+          items:
+            type: object
+            required:
+            - state
+            - timestamp
+            properties:
+              state:                
+                title: stato dell'istanza
+                type: string
+                enum:
+                - started
+                - presented
+                - correction_requested
+                - corrected 
+                - refused
+                - integration_requested
+                - integrated
+                - cdss_convened
+                - ended_by_conclusion
+                - ended_by_submitter_cancel_requested
+                
+              timestamp:                
+                title: timestamp del cambiamento di stato
+                type: string
+                format: date-time
+        
+        times:          
+          $ref: "#/components/schemas/Times"  
+        
+        administrative_regime:          
+          type: object
+          title: regime amministrativo dell'istanza          
+          
+          required:
+            - id
+            - version
+          properties:
+            id:              
+              title: identificativo univo del regime amministrativo
+              type: string
+              enum:
+               - SCIA
+               - AUTORIZZAZIONE
+               - SILENZIO-ASSENSO
+               - COMUNICAZIONE
+            version:              
+              title: version del regime amministrativo
+              type: string
+              pattern: "[0-9]{2}.[0-9]{2}.[0-9]{2}"
+        
+        usecase_proceedings:          
+          title: fattispecie procedimenti avviati
+          type: array
+          items:
+            type: object
+            required:
+            - code
+            - version
+            - competent_administration
+            - instance
+            properties:
+              code:                
+                title: codice della fattispecie presente nel Catalogo
+                type: string
+                minLength: 1
+              version:                
+                title: versione della fattispecie presente nel Catalogo
+                type: string
+                minLength: 1
+              competent_administration:                
+                title: amministrazione competente del procedimento
+                $ref: "#/components/schemas/AdministrationSchema"
+              form:                
+                title: riferimento agli oggetti per la validazione
+                type: object
+                required:
+                - xsd
+                properties:
+                  xsd:                    
+                    title: xsd per la validazione
+                    type: object
+                    required:
+                    - code
+                    - version
+                    properties:
+                      code:                        
+                        title: codice dell'XSD per la validazione
+                        type: string
+                        minLength: 1
+                      version:                        
+                        title: versione dell'XSD per la validazione
+                        type: string
+                        minLength: 1
+                  schematron:                    
+                    title: schematron per la validazione
+                    type: object
+                    required:
+                    - code
+                    - version
+                    - phase
+                    properties:
+                      code:                        
+                        title: codice dello schematron per la validazione
+                        type: string
+                        minLength: 1
+                      version:                        
+                        title: versione dello schematron per la validazione
+                        type: string
+                        minLength: 1
+                      phase:                        
+                        title: fasi dello schematron per la validazione
+                        type: array
+                        items:
+                          type: string
+              instance:                
+                title: porzione istanza relativa al procedimento
+                type: object
+                required:
+                - ref
+                - hash
+                - alg_hash
+                properties:
+                  ref:                    
+                    title: riferimento all'elemento dell'istanza relativo al procedimento
+                    type: string
+                    minLength: 1
+                  filename:                      
+                      title: filename dell'istanza
+                      type: string
+                      minLength: 1
+                  hash:                    
+                    title: hash dell'istanza relativo al procedimento
+                    type: string
+                    minLength: 1
+                  alg_hash:                    
+                    title: algoritmo hash dell'istanza relativo al procedimento
+                    type: string
+                    enum:
+                    - S256
+                    - S384
+                    - S512
+                  mime_type:
+                    type: string
+                    enum: 
+                       - application/xml
+                  activity_model: 
+                     title: porzione distinta modello attivita
+                     type: object
+                     properties:
+                        ref:                    
+                          title: distinta modello attivitÃ 
+                          type: string
+                          minLength: 1
+                        filename:                      
+                            title: filename del modello distinta attivita
+                            type: string
+                            minLength: 1
+                        hash:                    
+                          title: hash del modello distinta attivita
+                          type: string
+                          minLength: 1
+                        alg_hash:                    
+                          title: algoritmo hash del modello distinta attivita
+                          type: string
+                          enum:
+                          - S256
+                          - S384
+                          - S512
+                        mime_type:
+                          type: string
+                          enum: 
+                             - application/pdf
+              attachments:                
+                title: allegati all'istanza relativi al procedimento
+                type: array
+                items:
+                  type: object
+                  required:
+                  - ref
+                  - hash
+                  - alg_hash
+                  - mime_type
+                  properties:
+
+                    ref:                      
+                      title: riferimento all'allegato dell'istanza relativo al procedimento
+                      type: string
+                      minLength: 1
+                    filename:                      
+                      title: filename dell'allegato
+                      type: string
+                      minLength: 1
+                    hash:                      
+                      title: hash dell'allegato
+                      type: string
+                      minLength: 1
+                    alg_hash:                      
+                      title: algoritmo hash dell'allegato 
+                      type: string
+                      enum:
+                      - S256
+                      - S384
+                      - S512
+                    form:                      
+                      title: riferimento agli oggetti per la validazione
+                      type: object
+                      required:
+                      - xsd
+                      properties:
+                        xsd:                          
+                          title: xsd per la validazione
+                          type: object
+                          required:
+                          - code
+                          - version
+                          properties:
+                            code:                              
+                              title: codice dell'XSD per la validazione
+                              type: string
+                              minLength: 1
+                            version:                              
+                              title: versione dell'XSD per la validazione
+                              type: string
+                              minLength: 1
+                        schematron:                          
+                          title: schematron per la validazione
+                          type: object
+                          required:
+                          - code
+                          - version
+                          - phase
+                          properties:
+                            code:                              
+                              title: codice dello schematron per la validazione
+                              type: string
+                              minLength: 1
+                            version:                              
+                              title: versione dello schematron per la validazione
+                              type: string
+                              minLength: 1
+                            phase:                              
+                              title: fasi dello schematron per la validazione
+                              type: array
+                              items:
+                                type: string
+                    mime_type:
+                      type: string
+
+  headers:
+    Agid-JWT-Signature:
+      schema:
+        format: JWS
+        maxLength: 4096
+        type: string
+        example: eyJzd.fafa.fafafa
+      description: |-
+        Il valore di questo header è una token JWT firmato secondo la specifica JWS.
+        Vedi Modi  [integrity_rest_01] Integrità del payload del messaggio REST.
+
+  securitySchemes:
+    bearerAuth:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
+      description: Implementazione conforme ad RFC8725
+
+    Agid-JWT-Signature:
+      type: apiKey
+      description: |-
+        Il valore di questo header è una token JWT firmato secondo la specifica JWS.
+        Vedi Modi  [integrity_rest_01] Integrità del payload del messaggio REST.
+      name: Agid-JWT-Signature
+      in: header
