@@ -1169,7 +1169,7 @@ paths:
   /usecase-proceedings-endoproceedings/{id_usecase_proceeding_list}/{context}: 
     get:
       description: |
-         Recupero bulk tuple {fattispecie,fattispecie,obbligatorio}(tutte le versioni)(tutte le versioni) per una lista di identificativi procedimento
+         Recupero bulk tuple {fattispecie,fattispecie,obbligatorio}(tutte le versioni) per una lista di identificativi procedimento
       parameters:
         - in: path
           name: id_usecase_proceeding_list
