@@ -23,7 +23,7 @@ servers:
 paths:
   /context:
     get:
-      description: Recupero dei possibili valori di contesto di riferimento
+      description: Recupero dei possibili valori del contesto di riferimento
       
       responses:
         "200":
