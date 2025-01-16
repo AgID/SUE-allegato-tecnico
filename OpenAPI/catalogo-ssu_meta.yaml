@@ -91,7 +91,7 @@ paths:
             type: string
         - in: path
           name: context
-          description: contesto di riferimento. I valori ammissibili sono reperibili invocando il servizio /context
+          description: contesto di riferimento. I valori ammissibili sono reperibili invocando il path /context
           required: true
           schema:
             type: string
@@ -173,7 +173,7 @@ paths:
             type: string
         - in: path
           name: context
-          description: contesto di riferimento. I valori ammissibili sono reperibili invocando il servizio /context
+          description: contesto di riferimento. I valori ammissibili sono reperibili invocando il path /context
           required: true
           schema:
             type: string
@@ -759,7 +759,7 @@ paths:
             type: string
         - in: path
           name: context
-          description: contesto di riferimento. I valori ammissibili sono reperibili invocando il servizio /context
+          description: contesto di riferimento. I valori ammissibili sono reperibili invocando il path /context
           required: true
           schema:
             type: string
@@ -908,7 +908,7 @@ paths:
           style: simple
         - in: path
           name: context
-          description: contesto di riferimento. I valori ammissibili sono reperibili invocando il servizio /context
+          description: contesto di riferimento. I valori ammissibili sono reperibili invocando il path /context
           required: true
           schema:
             type: string
@@ -1182,7 +1182,7 @@ paths:
           style: simple
         - in: path
           name: context
-          description: contesto di riferimento. I valori ammissibili sono reperibili invocando il servizio /context
+          description: contesto di riferimento. I valori ammissibili sono reperibili invocando il path /context
           required: true
           schema:
             type: string
@@ -1595,7 +1595,7 @@ paths:
           style: simple
         - in: path
           name: context
-          description: contesto di riferimento. I valori ammissibili sono reperibili invocando il servizio /context
+          description: contesto di riferimento. I valori ammissibili sono reperibili invocando il path /context
           required: true
           schema:
             type: string
