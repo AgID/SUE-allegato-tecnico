@@ -27,7 +27,7 @@ paths:
       parameters:
         - in: path
           name: context
-          description: contesto di riferimento. I valori ammissibili sono riportati all'interno del file ContextValues
+          description: contesto di riferimento. I valori ammissibili sono reperibili invocando il path /context dell'OpenAPI catalogo-ssu_meta
           required: true
           schema:
             type: string
