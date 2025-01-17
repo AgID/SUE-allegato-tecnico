@@ -7,6 +7,9 @@ required:
 - version
 - municipality
 - usecase_proceedings
+- instance_status
+- times
+- administrative_regime 
 properties:
   version:
     "$id": "#root/version"
@@ -20,7 +23,6 @@ properties:
     title: codice istat 6 cifre del comune in cui l'istanza è stata presentata
     type: string
     pattern: "^[0-9]{6}$"
-  
   legal_person:
     "$id": "#root/legal_person"
     title: codice fiscale persona giuridica
@@ -38,7 +40,7 @@ properties:
       properties:
         state:
           "$id": "#root/instance_status/state"
-          title: stato dell'istanza
+          title: stato dell'istanza, stato iniziale da impostare in started
           type: string
           enum:
           - started
@@ -261,6 +263,16 @@ properties:
                 - S256
                 - S384
                 - S512
+              code:
+                "$id": "#root/usecase_proceedings/attachments/code"
+                title: identificativo dell'allegato presente nel Catalogo
+                type: string
+                minLength: 1
+              version:
+                "$id": "#root/usecase_proceedings/attachments/version"
+                title: versione dell'allegato presente nel Catalogo
+                type: string
+                minLength: 1
               form:
                 "$id": "root/usecase_proceedings/attachments/form"
                 title: riferimento agli oggetti per la validazione
