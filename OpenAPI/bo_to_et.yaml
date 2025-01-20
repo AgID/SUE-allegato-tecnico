@@ -428,7 +428,7 @@ components:
                     type: string
                 outcome_motivation:
                     type: string
-                    title: la motivazione della conclusione. In caso di outcome negativo, ne descrive il motivo. In caso di conformazione, indica anche la data entro cui effettuarla.
+                    title: la motivazione della conclusione. In caso di outcome negativo o di conformazione, ne descrive il motivo.
                 requester_administration:
                     title: amministrazione richiedente
                     $ref: "#/components/schemas/AdministrationSchema"
@@ -447,6 +447,10 @@ components:
                     - S256
                     - S384
                     - S512
+                date_conformation:
+                    title: data entro cui effettuare la conformazione, se la conclusion type e' una conformazione.
+                    type: string
+                    format: date
             example:
                 conclusions_type: "conclusione per conformazione"
                 cui: 
