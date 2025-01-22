@@ -341,6 +341,37 @@ components:
                     type: string
                 instance_index:
                     $ref: "#/components/schemas/InstanceIndex"
+                resources:
+                    type: array
+                    description: array delle risorse
+                    items:
+                        type: object
+                        required: 
+                        - resource_id
+                        - hash
+                        - alg_hash
+                        - description
+                        properties:
+                            resource_id:                            
+                                title: id della risorsa, univoco per erogatore e CUI.UUID
+                                type: string
+                                minLength: 1
+                            hash:                            
+                                title: hash dell'elemento dell'istanza relativo al procedimento
+                                type: string
+                                minLength: 1
+                            alg_hash:                                
+                                title: algoritmo hash applicato
+                                type: string
+                                enum:
+                                - S256
+                                - S384
+                                - S512
+                            description:                            
+                                title: descrizione della risorsa
+                                type: string
+                                minLength: 1
+
         
         NotifyMessage:
             type: object
