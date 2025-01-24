@@ -418,11 +418,6 @@ components:
                 - $ref: "#/components/schemas/ConformationRequired"
                 - $ref: "#/components/schemas/PositiveOutcome"
                 - $ref: "#/components/schemas/GenericConclusion"
-                mapping:
-                    negative_outcome: "#/components/schemas/NegativeOutcomeRequired"
-                    conformation_requested: "#/components/schemas/ConformationRequired"
-                    positive_outcome: "#/components/schemas/PositiveOutcome"
-                    generic_conclusion: "#/components/schemas/GenericConclusion"
 
         NegativeOutcomeRequired:
             type: object
