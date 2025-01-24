@@ -418,8 +418,6 @@ components:
                 - $ref: "#/components/schemas/ConformationRequired"
                 - $ref: "#/components/schemas/PositiveOutcome"
                 - $ref: "#/components/schemas/GenericConclusion"
-            discriminator:
-                propertyName: conclusions_type
                 mapping:
                     negative_outcome: "#/components/schemas/NegativeOutcomeRequired"
                     conformation_requested: "#/components/schemas/ConformationRequired"
