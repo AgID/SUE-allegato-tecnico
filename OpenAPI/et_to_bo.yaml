@@ -414,7 +414,7 @@ components:
                         - end_by_negative_outcome
                         - end_by_generic_conclusion
                 type_generic_outcome:
-                    title: In caso di "end_by_generic_outcome" descrivere il tipo di conclusione
+                    title: In caso di "end_by_generic_conclusion" descrivere il tipo di conclusione
                     type: string
                 resource_id:
                     title: se presente, id della risorsa documento correlata all'evento notificato
