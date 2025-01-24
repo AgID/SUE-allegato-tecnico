@@ -459,7 +459,6 @@ components:
                 - cui
                 - instance_descriptor_version
                 - event
-                - conclusions_type
             properties:
                 cui:
                     $ref: "#/components/schemas/cui"
@@ -468,10 +467,14 @@ components:
                 event:
                     type: string
                     enum:
-                        - end_by_conclusion
-                conclusions_type:
+                        - end_by_suspension_requested
+                        - end_by_conformation_requested
+                        - end_by_positive_outcome
+                        - end_by_negative_outcome
+                        - end_by_generic_outcome
+                type_generic_outcome:
+                    title: In caso di "end_by_generic_outcome" descrivere il tipo di conclusione
                     type: string
-                    title: tipologia della conclusione
                 resource_id:
                     title: se presente, id della risorsa documento correlata all'evento notificato
                     type: string
@@ -487,10 +490,6 @@ components:
                     - S256
                     - S384
                     - S512
-                date_conformation:
-                    title: data entro cui effettuare la conformazione, se la conclusion type e' una conformazione.
-                    type: string
-                    format: date
 
     headers:
         Agid-JWT-Signature:

@@ -413,22 +413,39 @@ components:
 
         SendConclusionRequests:
             type: object
+            oneOf:
+                - $ref: "#/components/schemas/NegativeOutcomeRequired"
+                - $ref: "#/components/schemas/ConformationRequired"
+                - $ref: "#/components/schemas/PositiveOutcome"
+                - $ref: "#/components/schemas/GenericConclusion"
+            discriminator:
+                propertyName: conclusions_type
+                mapping:
+                    negative_outcome: "#/components/schemas/NegativeOutcomeRequired"
+                    conformation_requested: "#/components/schemas/ConformationRequired"
+                    positive_outcome: "#/components/schemas/PositiveOutcome"
+                    generic_conclusion: "#/components/schemas/GenericConclusion"
+
+        NegativeOutcomeRequired:
+            type: object
             required:
                 - cui
                 - instance_descriptor_version
+                - negative_outcome_motivation
                 - conclusions_type
                 - requester_administration
             properties:
                 conclusions_type:
                     type: string
-                    title: tipologia della conclusione
+                    enum: 
+                    - negative_outcome
                 cui:
                     $ref: "#/components/schemas/cui"
                 instance_descriptor_version:
                     type: string
-                outcome_motivation:
+                negative_outcome_motivation:
                     type: string
-                    title: la motivazione della conclusione. In caso di outcome negativo o di conformazione, ne descrive il motivo.
+                    minLength: 1
                 requester_administration:
                     title: amministrazione richiedente
                     $ref: "#/components/schemas/AdministrationSchema"
@@ -447,22 +464,137 @@ components:
                     - S256
                     - S384
                     - S512
-                date_conformation:
-                    title: data entro cui effettuare la conformazione, se la conclusion type e' una conformazione.
-                    type: string
-                    format: date
             example:
-                conclusions_type: "conclusione per conformazione"
+                conclusions_type: "negative_outcome"
                 cui: 
-                    context: "SUE"
-                    data: "2025-01-15"
+                    context: "string"
+                    data: "2024-07-10"
                     progressivo: "string"
                     uuid: "string"
                 instance_descriptor_version: "string"
-                outcome_motivation: "conformazione richiesta entro 30gg"
+                negative_outcome_motivation: "string"
                 resource_id: "string"
                 hash: "string"
                 alg_hash: "S256"
+                
+        ConformationRequired:
+            type: object
+            required:
+                - cui
+                - instance_descriptor_version
+                - date
+                - conformation_requested
+                - conclusions_type
+                - requester_administration
+            properties:
+                conclusions_type:
+                    type: string
+                    enum: 
+                    - conformation_requested
+                cui:
+                    $ref: "#/components/schemas/cui"
+                instance_descriptor_version:
+                    type: string
+                date:
+                    type: string
+                    format: date
+                conformation_requested:
+                    type: string
+                    minLength: 1
+                requester_administration:
+                    title: amministrazione richiedente
+                    $ref: "#/components/schemas/AdministrationSchema"
+                resource_id:
+                    title: id della risorsa "documento di richiesta conformazione", univoco per erogatore e CUI.UUID
+                    type: string
+                    minLength: 1
+                hash:
+                    title: hash risorsa
+                    type: string
+                    minLength: 1
+                alg_hash:
+                    title: algoritmo hash applicato
+                    type: string
+                    enum:
+                    - S256
+                    - S384
+                    - S512
+
+        PositiveOutcome:
+            required:
+                - cui
+                - instance_descriptor_version
+                - positive_outcome
+                - conclusions_type
+                - requester_administration
+            properties:
+                conclusions_type:
+                    type: string
+                    enum: 
+                    - positive_outcome
+                cui:
+                    $ref: "#/components/schemas/cui"
+                instance_descriptor_version:
+                    type: string
+                positive_outcome:
+                    type: string
+                    minLength: 1
+                requester_administration:
+                    title: amministrazione richiedente
+                    $ref: "#/components/schemas/AdministrationSchema"
+                resource_id:
+                    title: id della risorsa "documento di parere positivo", univoco per erogatore e CUI.UUID
+                    type: string
+                    minLength: 1
+                hash:
+                    title: hash risorsa
+                    type: string
+                    minLength: 1
+                alg_hash:
+                    title: algoritmo hash applicato
+                    type: string
+                    enum:
+                    - S256
+                    - S384
+                    - S512
+
+        GenericConclusion:
+            required:
+                - cui
+                - instance_descriptor_version
+                - generic_conclusion
+                - conclusions_type
+                - requester_administration
+            properties:
+                conclusions_type:
+                    type: string
+                    enum: 
+                    - generic_conclusion
+                cui:
+                    $ref: "#/components/schemas/cui"
+                instance_descriptor_version:
+                    type: string
+                generic_conclusion:
+                    type: string
+                    minLength: 1
+                requester_administration:
+                    title: amministrazione richiedente
+                    $ref: "#/components/schemas/AdministrationSchema"
+                resource_id:
+                    title: id della risorsa "documento di parere positivo", univoco per erogatore e CUI.UUID
+                    type: string
+                    minLength: 1
+                hash:
+                    title: hash risorsa
+                    type: string
+                    minLength: 1
+                alg_hash:
+                    title: algoritmo hash applicato
+                    type: string
+                    enum:
+                    - S256
+                    - S384
+                    - S512
 
     headers:
         Agid-JWT-Signature:
