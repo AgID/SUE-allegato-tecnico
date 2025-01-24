@@ -568,6 +568,7 @@ components:
                 instance_descriptor_version:
                     type: string
                 generic_conclusion:
+                    title: descrizione della conclusione generica
                     type: string
                     minLength: 1
                 requester_administration:
