@@ -467,6 +467,7 @@ components:
                 event:
                     type: string
                     enum:
+                        - end_by_suspension_requested
                         - end_by_conformation_requested
                         - end_by_positive_outcome
                         - end_by_negative_outcome
