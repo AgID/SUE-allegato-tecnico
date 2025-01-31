@@ -211,7 +211,7 @@ paths:
       tags:
         - Proceedings
  
-  /proceeding/{proceeding_id}/{proceeding_version}/usecase-proceedings: #NO CONTEXT
+  /proceeding/{proceeding_id}/{proceeding_version}/usecase-proceedings:
     get:
       description: Recupero elenco fattispecie (usecase-proceedings) di uno specifico procedimento
       parameters:
@@ -261,7 +261,7 @@ paths:
       tags:
         - Proceedings
 
-  /proceeding/{proceeding_id}/{proceeding_version}/attachments: #NO CONTEXT
+  /proceeding/{proceeding_id}/{proceeding_version}/attachments:
     get:
       description: |
         Recupero elenco allegati di un procedimento
@@ -322,7 +322,7 @@ paths:
       tags:
         - Proceedings
 
-  /proceeding/{proceeding_id}/{proceeding_version}/{municipality}/competent-administration: #NO CONTEXT
+  /proceeding/{proceeding_id}/{proceeding_version}/{municipality}/competent-administration:
     get:
       description: |
         Recupero amministrazione competente per uno specifico procedimento
@@ -376,7 +376,7 @@ paths:
       tags:
         - Proceedings
 
-  /proceeding/{proceeding_id}/{proceeding_version}/form: #NO CONTEXT
+  /proceeding/{proceeding_id}/{proceeding_version}/form:
     get:
       description: |
         Recupero modulo digitale di uno specifico procedimento
@@ -426,7 +426,7 @@ paths:
       tags:
         - Proceedings
 
-  /usecase-proceedings/{usecase_proceedings_id}/{usecase_proceedings_version}/usecase-proceedings: #NO CONTEXT
+  /usecase-proceedings/{usecase_proceedings_id}/{usecase_proceedings_version}/usecase-proceedings:
     get:
       description: |
         Recupero elenco delle fattispecie relazionate a una data fattispecie
@@ -486,7 +486,7 @@ paths:
       tags:
         - UseCases
 
-  /form/{form_id}/{form_version}/xsd: #NO CONTEXT
+  /form/{form_id}/{form_version}/xsd:
     get:
       description: |
         Recupero XML Schema di uno specifico modulo digitale
@@ -537,7 +537,7 @@ paths:
       tags:
         - Forms
 
-  /form/{form_id}/{form_version}/schematron: #NO CONTEXT
+  /form/{form_id}/{form_version}/schematron:
     get:
       description: |
         Recupero Schematron riferito ad un specifico modulo digitale
@@ -587,7 +587,7 @@ paths:
       tags:
         - Forms
 
-  /attachment/{attachment_id}/{attachment_version}/xsd: #NO CONTEXT
+  /attachment/{attachment_id}/{attachment_version}/xsd:
     get:
       description: |
         Recupero XML Schema riferito a un specifico allegato
@@ -637,7 +637,7 @@ paths:
       tags:
         - Attachments
 
-  /attachment/{attachment_id}/{attachment_version}/schematron: #NO CONTEXT
+  /attachment/{attachment_id}/{attachment_version}/schematron:
     get:
       description: |
         Recupero Schematron riferito ad un specifico allegato
@@ -687,7 +687,7 @@ paths:
       tags:
         - Attachments
  
-  /competent-administration/{competent_administration_ipacode}/{competent_administration_code}/{competent_administration_version}/third-party-system: #NO CONTEXT
+  /competent-administration/{competent_administration_ipacode}/{competent_administration_code}/{competent_administration_version}/third-party-system:
     get:
       description: |
         Recupero elenco Enti Terzi di una specifica amministrazione competente
@@ -794,7 +794,7 @@ paths:
       tags:
         - Sportello
 
-  /single-desk/{single_desk_id}/{single_desk_version}/frontoffice-system: #NO CONTEXT
+  /single-desk/{single_desk_id}/{single_desk_version}/frontoffice-system:
     get:
       description: |
         Recupero Sistema FrontOffice di uno specifico Sportello
@@ -843,7 +843,7 @@ paths:
       tags:
         - Sportello
 
-  /single_desk/{single_desk_id}/{single_desk_version}/backoffice-system: #NO CONTEXT
+  /single_desk/{single_desk_id}/{single_desk_version}/backoffice-system:
     get:
       description: |
         Recupero Sistema BackOffice di uno specifico Sportello
@@ -946,7 +946,7 @@ paths:
       tags:
         - Bulk
 
-  /proceedings-by-id/{id_proceeding_list}: #NO CONTEXT
+  /proceedings-by-id/{id_proceeding_list}:
     get:
       description: |
         Recupero bulk elenco procedimenti(tutte le versioni) per una lista di identificativi procedimento
@@ -993,7 +993,7 @@ paths:
       tags:
         - Bulk
 
-  /proceedings-attachments/{id_proceeding_list}: #NO CONTEXT
+  /proceedings-attachments/{id_proceeding_list}:
     get:
       description: |
          Recupero bulk elenco tuple {procedimento,allegato,obbligatorio}(tutte le versioni) per una lista di identificativi procedimento
@@ -1051,7 +1051,7 @@ paths:
       tags:
         - Bulk
 
-  /proceedings-administrative-regimes/{id_proceeding_list}: #NO CONTEXT
+  /proceedings-administrative-regimes/{id_proceeding_list}:
     get:
       description: |
         Recupero bulk elenco tuple {fattispecie, regimi amministrativi e tempi}(tutte le versioni) per una lista di identificativi procedimento
@@ -1108,7 +1108,7 @@ paths:
       tags:
         - Bulk
 
-  /proceedings-usecases/{id_proceeding_list}: #NO CONTEXT
+  /proceedings-usecases/{id_proceeding_list}:
     get:
       description: |
         Recupero bulk elenco tuple {procedimento,fattispecie}(tutte le versioni) per una lista di identificativi procedimento
@@ -1231,7 +1231,7 @@ paths:
       tags:
         - Bulk
 
-  /proceedings-forms/{id_proceeding_list}: #NO CONTEXT
+  /proceedings-forms/{id_proceeding_list}:
     get:
       description: |
         Recupero bulk elenco tuple  {procedimenti,moduli digitali}(tutte le versioni) per una lista di identificativi procedimento
@@ -1287,7 +1287,7 @@ paths:
       tags:
         - Bulk
 
-  /forms-schematrons/{id_form_list}: #NO CONTEXT
+  /forms-schematrons/{id_form_list}:
     get:
       description: |
         Recupero bulk elenco tuple  {moduli digitali,schematron}(tutte le versioni) per una lista di identificativi procedimento
@@ -1344,7 +1344,7 @@ paths:
       tags:
         - Bulk
 
-  /forms-xsds/{id_form_list}: #NO CONTEXT
+  /forms-xsds/{id_form_list}:
     get:
       description: |
         Recupero bulk elenco tuple  {moduli digitali,xml schema}(tutte le versioni) per una lista di identificativi procedimento
@@ -1399,7 +1399,7 @@ paths:
       tags:
         - Bulk
 
-  /proceedings-competent-administrations/{id_proceeding_list}: #NO CONTEXT
+  /proceedings-competent-administrations/{id_proceeding_list}:
     get:
       description: |
          Recupero bulk tuple {procedimento,amministrazione competente,comune}(tutte le versioni) per una lista di identificativi procedimento
@@ -1457,7 +1457,7 @@ paths:
       tags:
         - Bulk
 
-  /proceedings-competent-administrations/{id_proceeding_list}/{municipality_list}: #NO CONTEXT  
+  /proceedings-competent-administrations/{id_proceeding_list}/{municipality_list}:  
     get:
       description: |
          Recupero bulk tuple {procedimento,amministrazione competente,comune}(tutte le versioni)(tutte le versioni) per una lista di identificativi procedimento
@@ -1524,7 +1524,7 @@ paths:
       tags:
         - Bulk
 
-  /competent-administrations-systems/{id_competent_administrations_list}: #NO CONTEXT
+  /competent-administrations-systems/{id_competent_administrations_list}:
     get:
       description: |
          Recupero bulk tuple {amministrazione competente,sistema ente terzo}(tutte le versioni) per una lista di identificativi dell'amministrazione competente
@@ -1640,7 +1640,7 @@ paths:
       tags:
         - Bulk
 
-  /single_desks-by-id/{id_single_desk_list}: #NO CONTEXT
+  /single_desks-by-id/{id_single_desk_list}:
     get:
       description: |
         Recupero bulk elenco sportelli (tutte le versioni) per una lista di identificativi sportelli
@@ -1692,7 +1692,7 @@ paths:
       tags:
         - Bulk
 
-  /single_desks-fo-systems/{id_single_desk_list}: #NO CONTEXT
+  /single_desks-fo-systems/{id_single_desk_list}:
     get:
       description: |
          Recupero bulk tuple {sportello, sistema FrontOffice}(tutte le versioni) per una lista di identificativi degli sportelli
@@ -1747,7 +1747,7 @@ paths:
       tags:
         - Bulk
 
-  /single_desks-bo-systems/{id_single_desk_list}: #NO CONTEXT
+  /single_desks-bo-systems/{id_single_desk_list}:
     get:
       description: |
          Recupero bulk tuple {sportello, sistema BackOffice}(tutte le versioni) per una lista di identificativi
