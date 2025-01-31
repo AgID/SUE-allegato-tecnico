@@ -1,5 +1,2 @@
 # SUE-allegato-tecnico
-repo artefatti allegato tecnico SUE
-
-
-i file sono nel branches/work 
+Repository AgID contenente gli artefatti tecnici menzionati all'interno del documento "Allegato Tecnico SUE".
