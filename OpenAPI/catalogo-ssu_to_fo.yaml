@@ -32,6 +32,12 @@ paths:
           schema:
             type: string
             default: "SUAP"
+        - in: query
+          name: sub_context
+          description: specificità del contesto (es. SUE Produttivo, SUE Residenziale). I valori ammissibili sono reperibili invocando il path /context dell'OpenAPI catalogo-ssu_meta
+          required: false
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
@@ -192,8 +198,10 @@ components:
               title: data emissione cui
               type: string
               format: date
-          
-          progressivo:
+          sub_context:
+              title: Specificità del contesto (es. SUE Produttivo, SUE Residenziale)
+              type: string
+          progressive:
               title: numero progressivo a rotazione annuale
               type: string
 

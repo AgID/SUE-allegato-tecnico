@@ -48,6 +48,7 @@ paths:
                                         - resource_id
                                         - hash
                                         - alg_hash
+                                        - mime_type
                                         - description
                                         properties:
                                             resource_id:                            
@@ -65,6 +66,8 @@ paths:
                                                 - S256
                                                 - S384
                                                 - S512
+                                            mime_type:
+                                                type: string
                                             description:                            
                                                 title: descrizione della risorsa
                                                 type: string
@@ -321,15 +324,16 @@ components:
                 context:
                     title: contesto dell'istanza
                     type: string
+                sub_context:
+                    title: Specificità del contesto (es. SUE Produttivo, SUE Residenziale)
+                    type: string
                 data:
                     title: data emissione cui
                     type: string
                     format: date
-                
-                progressivo:
+                progressive:
                     title: numero progressivo a rotazione annuale
                     type: string
-
                 uuid:
                     title: UUID chiave del CUI
                     type: string
@@ -408,6 +412,7 @@ components:
                         - resource_id
                         - hash
                         - alg_hash
+                        - mime_type
                         - description
                         properties:
                             resource_id:                            
@@ -425,6 +430,8 @@ components:
                                 - S256
                                 - S384
                                 - S512
+                            mime_type:
+                                type: string
                             description:                            
                                 title: descrizione della risorsa
                                 type: string

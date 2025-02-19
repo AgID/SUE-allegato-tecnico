@@ -13,12 +13,15 @@ properties:
     "$id": "#root/context"
     title: contesto dell'istanza. I valori ammissibili sono reperibili invocando il path /context dell'OpenAPI catalogo-ssu_meta
     type: string
+  sub_context:
+    title: Specificità del contesto (es. SUE Produttivo, SUE Residenziale)
+    type: string
   data:
     "$id": "#root/cui/data"
     title: data emissione cui
     type: string
     format: date
-  progressivo:
+  progressive:
     "$id": "#root/cui/progressivo"
     title: numero progressivo a rotazione annuale
     type: string
