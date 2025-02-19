@@ -18,7 +18,7 @@ info:
 
 servers:
     - url: https://<system host+subdomains>.it
-      description: RegistroImprese to BackOffice SUAP endpoint
+      description: RegistroImprese to BackOffice SUE endpoint
 
 paths:
     
