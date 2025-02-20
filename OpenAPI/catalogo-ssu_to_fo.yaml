@@ -21,7 +21,7 @@ servers:
     description: Catalogo SSU to FrontOffice SUE endpoint
 
 paths:
-  /request_cui/{context}:
+  /request_cui/{context}/{sub_context}:
     description: Richiesta del CUI
     post:
       parameters:
@@ -32,12 +32,13 @@ paths:
           schema:
             type: string
             default: "SUAP"
-        - in: query
+        - in: path
           name: sub_context
           description: specificità del contesto (es. SUE Produttivo, SUE Residenziale). I valori ammissibili sono reperibili invocando il path /context dell'OpenAPI catalogo-ssu_meta
-          required: false
+          required: true
           schema:
             type: string
+            default: "SUAP"
       requestBody:
         content:
           application/json:
@@ -187,6 +188,7 @@ components:
       description: codice unico dell'istanza
       required:
           - context
+          - sub_context
           - data
           - progressive
           - uuid
