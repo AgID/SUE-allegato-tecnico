@@ -793,7 +793,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ContextEntity"
+                $ref: "#/components/schemas/DeskEntity"
           headers:
             Agid-JWT-Signature:
               $ref: "#/components/headers/Agid-JWT-Signature"
@@ -1987,24 +1987,27 @@ components:
         description: Entità generica con id,versione, descrizione
 
     ContextEntity:
-      description: struttura di risorsa generica con id,versione e descrizione
       allOf:
         - $ref: "#/components/schemas/GenericEntity"
         - type: object
           required:
             - context
+            - sub_context
           properties:
             context:
               title: contesto di riferimento
+              type: string
+            sub_context:
+              title: specificità del contesto
               type: string
       example:
         id: 1
         version: 1.0.0
         description: Entità generica con id,versione, descrizione
         context: SUAP
+        sub_context: SUAP
     
     ComponentEntity:
-      description: struttura di risorsa generica con id,versione e descrizione
       allOf:
         - $ref: "#/components/schemas/GenericEntity"
         - type: object
