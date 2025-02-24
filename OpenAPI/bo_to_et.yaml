@@ -290,6 +290,7 @@ components:
             description: codice unico dell'istanza
             required:
                 - context
+                - sub_context
                 - data
                 - progressive
                 - uuid
@@ -297,15 +298,16 @@ components:
                 context:
                     title: contesto dell'istanza
                     type: string
+                sub_context:
+                    title: Specificità del contesto (es. SUE Produttivo, SUE Residenziale)
+                    type: string
                 data:
                     title: data emissione cui
                     type: string
                     format: date
-                
-                progressivo:
+                progressive:
                     title: numero progressivo a rotazione annuale
                     type: string
-
                 uuid:
                     title: UUID chiave del CUI
                     type: string
@@ -461,6 +463,7 @@ components:
                 conclusions_type: "negative_outcome"
                 cui: 
                     context: "string"
+                    sub_context: "string"
                     data: "2024-07-10"
                     progressivo: "string"
                     uuid: "string"
