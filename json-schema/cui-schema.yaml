@@ -5,6 +5,7 @@ description: codice unico dell'istanza
 type: object
 required:
 - context
+- sub_context
 - data
 - progressive
 - uuid
