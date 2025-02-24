@@ -2050,9 +2050,7 @@ components:
             context:
               title: contesto di riferimento (es. SUAP, SUE)
               type: string
-              enum:
-                - SUAP
-                - SUE
+
       example:
         id: 1
         version: 1.0.0
