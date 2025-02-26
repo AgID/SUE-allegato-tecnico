@@ -71,7 +71,7 @@ paths:
       tags:
         - Context
 
-  /typologies-lifeevents/{context}/{sub_context}:
+  /typologies-lifeevents/{context}:
     get:
       description: Recupero elenco tipologie ed eventi della vita dei procedimenti
       parameters:
@@ -100,13 +100,6 @@ paths:
           schema:
             type: string
             default: "SUAP"
-        - in: path
-          name: sub_context
-          description: specificità del contesto. I valori ammissibili sono reperibili invocando il path /context
-          required: true
-          schema:
-            type: string
-            default: "SUAP"
 
       responses:
         "200":
@@ -122,7 +115,6 @@ paths:
                     - lifeevent
                     - municipality
                     - context
-                    - sub_context
                   properties:
                     typology:
                       description: tipologia del procedimento (es. esercizio di vicinato, grande/media struttura di vendita)
@@ -135,9 +127,6 @@ paths:
                       type: string
                     context:
                       description: contesto di riferimento (es. SUAP, SUE)
-                      type: string
-                    sub_context:
-                      description: contesto di riferimento (es. SUAP, SUE produttivo, SUE residenziale)
                       type: string
 
           headers:
@@ -166,7 +155,7 @@ paths:
       tags:
         - Lookup
 
-  /proceedings/{context}/{sub_context}:
+  /proceedings/{context}:
     get:
       description: Recupero elenco procedimenti per tipologia, evento della vita, comune (mapping su ambito territoriale) e contesto di riferimento
       parameters:
@@ -189,13 +178,6 @@ paths:
         - in: path
           name: context
           description: contesto di riferimento. I valori ammissibili sono reperibili invocando il path /context
-          required: true
-          schema:
-            type: string
-            default: "SUAP"
-        - in: path
-          name: sub_context
-          description: specificità del contesto. I valori ammissibili sono reperibili invocando il path /context
           required: true
           schema:
             type: string
@@ -914,7 +896,7 @@ paths:
       tags:
         - Sportello
 
-  /proceedings-by-municipality/{municipality_list}/{context}/{sub_context}:
+  /proceedings-by-municipality/{municipality_list}/{context}:
     get:
       description: |
         Recupero bulk elenco procedimenti(tutte le versioni) per una lista di comuni
@@ -931,13 +913,6 @@ paths:
         - in: path
           name: context
           description: contesto di riferimento. I valori ammissibili sono reperibili invocando il path /context
-          required: true
-          schema:
-            type: string
-            default: "SUAP"
-        - in: path
-          name: sub_context
-          description: specificità del contesto. I valori ammissibili sono reperibili invocando il path /context
           required: true
           schema:
             type: string
@@ -1195,7 +1170,7 @@ paths:
       tags:
         - Bulk
 
-  /usecase-proceedings-endoproceedings/{id_usecase_proceeding_list}/{context}/{sub_context}: 
+  /usecase-proceedings-endoproceedings/{id_usecase_proceeding_list}/{context}: 
     get:
       description: |
          Recupero bulk tuple {fattispecie,fattispecie,obbligatorio}(tutte le versioni) per una lista di identificativi procedimento
@@ -1212,13 +1187,6 @@ paths:
         - in: path
           name: context
           description: contesto di riferimento. I valori ammissibili sono reperibili invocando il path /context
-          required: true
-          schema:
-            type: string
-            default: "SUAP"
-        - in: path
-          name: sub_context
-          description: specificità del contesto. I valori ammissibili sono reperibili invocando il path /context
           required: true
           schema:
             type: string
@@ -1992,20 +1960,15 @@ components:
         - type: object
           required:
             - context
-            - sub_context
           properties:
             context:
               title: contesto di riferimento
-              type: string
-            sub_context:
-              title: specificità del contesto
               type: string
       example:
         id: 1
         version: 1.0.0
         description: Entità generica con id,versione, descrizione
         context: SUAP
-        sub_context: SUAP
     
     ComponentEntity:
       allOf:
@@ -2156,7 +2119,7 @@ components:
         e_service_to_fo: string
         e_service_to_et: string  
         e_service_to_ri: string
-	
+
     Proceeding:
       description: procedimento amministrativo
       allOf:
@@ -2168,7 +2131,6 @@ components:
             - territorial_scope
             - status
             - context
-            - sub_context
           properties:
             typology:
               title: tipologia del procedimento
@@ -2188,9 +2150,6 @@ components:
             context:
               title: contesto di riferimento (SUAP, SUE)
               type: string
-            sub_context:
-              title: specificità del contesto (SUAP, SUE produttivo, SUE residenziale)
-              type: string
       example:
         id: 1
         version: 1.0.0
@@ -2200,7 +2159,6 @@ components:
         territorial_scope: 00000000
         status: Active
         context: SUE
-        sub_context: SUE produttivo
 
     UseCaseProceeding:
       allOf:
@@ -2210,7 +2168,6 @@ components:
             - proceeding_id
             - proceeding_version
             - proceeding_context
-            - proceeding_sub_context
           properties:
             proceeding_id:
               type: string
@@ -2218,9 +2175,6 @@ components:
               type: string
             proceeding_context:
               title: contesto di riferimento (SUAP, SUE)
-              type: string
-            proceeding_sub_context:
-              title: specificità del contesto (SUAP, SUE produttivo, SUE residenziale)
               type: string
             schematron_phase:
               type: string
@@ -2232,7 +2186,6 @@ components:
         proceeding_id: string
         proceeding_version: 1.0.0
         proceeding_context: SUAP
-        proceeding_sub_context: SUAP
         schematron_phase: phase_1
     
     AdministrativeRegime:
