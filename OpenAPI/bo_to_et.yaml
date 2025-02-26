@@ -469,6 +469,11 @@ components:
                     uuid: "string"
                 instance_descriptor_version: "string"
                 negative_outcome_motivation: "string"
+                requester_administration:
+                    ipacode: "string"
+                    officecode: "string"
+                    version: "00.00.00"
+                    description: "string" 
                 resource_id: "string"
                 hash: "string"
                 alg_hash: "S256"
