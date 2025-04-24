@@ -361,7 +361,7 @@ components:
                                 type: string
                                 minLength: 1
                             description:                            
-                                title: dscrizione della risorsa
+                                title: descrizione della risorsa
                                 type: string
                                 minLength: 1
                             resource_id:                            
