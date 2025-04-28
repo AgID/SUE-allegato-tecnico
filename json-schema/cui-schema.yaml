@@ -23,7 +23,7 @@ properties:
     type: string
     format: date
   progressive:
-    "$id": "#root/cui/progressivo"
+    "$id": "#root/cui/progressive"
     title: numero progressivo a rotazione annuale
     type: string
   uuid:
