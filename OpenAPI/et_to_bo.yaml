@@ -399,6 +399,7 @@ components:
                         - end_by_conformation_times_expired
                         - end_by_submitter_cancel_requested
                         - integration_request_time_expired
+                        - conformation_request_time_expired
                         
         TransferOutcomeNotifyMessage:
             type: object
