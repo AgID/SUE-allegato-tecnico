@@ -642,6 +642,7 @@ components:
             required:
                 - code
                 - message
+        
         SendInstanceRequest:
             type: object
             required:
@@ -656,40 +657,10 @@ components:
                 instance_index:
                     $ref: "#/components/schemas/InstanceIndex"
                 resources:
-                    type: array
-                    description: array delle risorse
-                    items:
-                        type: object
-                        required: 
-                        - resource_id
-                        - hash
-                        - alg_hash
-                        - mime_type
-                        - description
-                        properties:
-                            resource_id:                            
-                                title: id della risorsa, univoco per erogatore e CUI.UUID
-                                type: string
-                                minLength: 1
-                            hash:                            
-                                title: hash dell'elemento dell'istanza relativo al procedimento
-                                type: string
-                                minLength: 1
-                            alg_hash:                                
-                                title: algoritmo hash applicato
-                                type: string
-                                enum:
-                                - S256
-                                - S384
-                                - S512
-                            mime_type:
-                                type: string
-                            description:                            
-                                title: descrizione della risorsa
-                                type: string
-                                minLength: 1
+                    oneOf:
+                        - $ref: "#/components/schemas/Resources"
+                        - $ref: "#/components/schemas/GeneralIndex"
 
-     
     headers:
         Agid-JWT-Signature:
             schema:
