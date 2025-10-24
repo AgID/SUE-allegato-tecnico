@@ -261,6 +261,7 @@ components:
                           type: string
                           enum:
                             - application/xml
+                            - application/pkcs7-mime
                         resource_id:
                           type: string
                           minLength: 1
@@ -291,6 +292,7 @@ components:
                           type: string
                           enum:
                             - application/pdf
+                            - application/pkcs7-mime
                         resource_id:
                           type: string
                           minLength: 1
@@ -326,6 +328,7 @@ components:
                           type: string
                           enum:
                             - application/xml
+                            - application/pkcs7-mime
                         resource_id:
                           type: string
                           minLength: 1
@@ -356,6 +359,7 @@ components:
                           type: string
                           enum:
                             - application/pdf
+                            - application/pkcs7-mime
                         resource_id:
                           type: string
                           minLength: 1
