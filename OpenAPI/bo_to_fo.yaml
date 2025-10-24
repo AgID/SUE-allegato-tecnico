@@ -395,9 +395,6 @@ components:
                     - $ref: '#/components/schemas/ricevuta_pdf'
                     - $ref: '#/components/schemas/suap_xml'
                     - $ref: '#/components/schemas/suap_pdf'
-                    - $ref: '#/components/schemas/suap_rea_start_xml'
-                    - $ref: '#/components/schemas/suap_rea_update_xml'
-                    - $ref: '#/components/schemas/suap_rea_end_xml'
                             
         ricevuta_xml:
                       type: object
