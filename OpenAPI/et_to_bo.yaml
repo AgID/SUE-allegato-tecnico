@@ -186,8 +186,6 @@ paths:
                                 - $ref: "#/components/schemas/NotifyMessage"
                                 - $ref: "#/components/schemas/CdssNotifyMessage"
                                 - $ref: "#/components/schemas/TransferOutcomeNotifyMessage"
-                            discriminator:
-                                propertyName: event
                 required: true
             responses:
                 "200":
