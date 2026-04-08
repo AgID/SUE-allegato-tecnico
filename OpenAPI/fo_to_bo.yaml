@@ -53,7 +53,7 @@ paths:
                 "500":
                     $ref: "#/components/responses/ServerError"
                 "503":
-                    $ref: "#/components/responses/ServiceUnavaliable"
+                    $ref: "#/components/responses/ServiceUnavailable"
 
             security:
                 - bearerAuth: []
@@ -78,7 +78,7 @@ paths:
                 "500":
                     $ref: "#/components/responses/ServerError"
                 "503":
-                    $ref: "#/components/responses/ServiceUnavaliable"
+                    $ref: "#/components/responses/ServiceUnavailable"
 
             security:
                 - bearerAuth: []
@@ -103,7 +103,7 @@ paths:
                 "500":
                     $ref: "#/components/responses/ServerError"
                 "503":
-                    $ref: "#/components/responses/ServiceUnavaliable"
+                    $ref: "#/components/responses/ServiceUnavailable"
             security:
                 - bearerAuth: []
                   Agid-JWT-Signature: []
@@ -127,16 +127,24 @@ paths:
                 "500":
                     $ref: "#/components/responses/ServerError"
                 "503":
-                    $ref: "#/components/responses/ServiceUnavaliable"
+                    $ref: "#/components/responses/ServiceUnavailable"
             security:
                 - bearerAuth: []
                   Agid-JWT-Signature: []
 
     /instance/{cui_uuid}/document/{resource_id}:
         get:
-            description: | 
-                Recupero risorsa documento per un dato CUI.            
+            description: |
+                Recupero di una specifica risorsa (xml, documento digitale) in relazione a una data istanza di procedimento.
+            
             parameters:
+                - in: header
+                  name: Range
+                  description: Specifica l'intervallo di byte richiesto per il recupero parziale della risorsa.
+                  required: false
+                  schema:
+                    type: string
+                    example: bytes=0-999
                 - in: header
                   name: If-Match
                   description: precondizione contenente l'hash della risorsa
@@ -155,7 +163,6 @@ paths:
                   required: true
                   schema:
                       type: string
-
             responses:
                 "200":
                     description: risorsa richiesta, codificata in base64, il mime type relativo è specificato nel descrittore dell'istanza
@@ -189,34 +196,17 @@ paths:
                 "401":
                     $ref: "#/components/responses/Unauthorized"
                 "404":
-                    description: risorsa non trovata
-                    headers:
-                        Agid-JWT-Signature:
-                            $ref: "#/components/headers/Agid-JWT-Signature"
+                    $ref: "#/components/responses/NotFound"
                 "412":
-                    description: precondizione fallita, rappresentazione risorsa non correttamente individuata
-                    headers:
-                        Agid-JWT-Signature:
-                            $ref: "#/components/headers/Agid-JWT-Signature"
+                    $ref: "#/components/responses/PreconditionFailed"
                 "416":
-                    description: richiesta di range non soddisfacibile
-                    headers:
-                        Agid-JWT-Signature:
-                            $ref: "#/components/headers/Agid-JWT-Signature"
-                        Content-Range:
-                            description: espressione del range non soddisfacibile
-                            schema:
-                                type: string
-                                example: bytes 21010-47021/47022
+                    $ref: "#/components/responses/RangeNotSatisfiable"
                 "428":
-                    description: precondizione richiesta, rappresentazione risorsa non correttamente individuata
-                    headers:
-                        Agid-JWT-Signature:
-                            $ref: "#/components/headers/Agid-JWT-Signature"
+                    $ref: "#/components/responses/PreconditionRequired"
                 "500":
                     $ref: "#/components/responses/ServerError"
                 "503":
-                    $ref: "#/components/responses/ServiceUnavaliable"
+                    $ref: "#/components/responses/ServiceUnavailable"
 
             security:
                 - bearerAuth: []
@@ -243,7 +233,7 @@ paths:
                 "500":
                     $ref: "#/components/responses/ServerError"
                 "503":
-                    $ref: "#/components/responses/ServiceUnavaliable"
+                    $ref: "#/components/responses/ServiceUnavailable"
 
             security:
                 - bearerAuth: []
@@ -266,7 +256,52 @@ components:
             headers:
                 Agid-JWT-Signature:
                     $ref: "#/components/headers/Agid-JWT-Signature"
-        ServiceUnavaliable:
+        NotFound:
+            description: risorsa non trovata
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/Error"
+            headers:
+                Agid-JWT-Signature:
+                    $ref: "#/components/headers/Agid-JWT-Signature"
+                
+        PreconditionFailed:
+            description: precondizione fallita, rappresentazione risorsa non correttamente individuata
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/Error"
+            headers:
+                Agid-JWT-Signature:
+                    $ref: "#/components/headers/Agid-JWT-Signature"
+        
+        RangeNotSatisfiable:
+            description: richiesta di range non soddisfacibile
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/Error"
+            headers:
+                Agid-JWT-Signature:
+                    $ref: "#/components/headers/Agid-JWT-Signature"
+                Content-Range:
+                    description: lunghezza attuale della rappresentazione selezionata
+                    schema:
+                        type: string
+                        example: bytes */47022
+
+        PreconditionRequired:
+            description: precondizione richiesta, rappresentazione risorsa non correttamente individuata
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/Error"
+            headers:
+                Agid-JWT-Signature:
+                    $ref: "#/components/headers/Agid-JWT-Signature"
+
+        ServiceUnavailable:
             description: Servizio non disponibile
             content:
                 application/json:
