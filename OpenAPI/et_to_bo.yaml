@@ -40,6 +40,10 @@ paths:
                                         - request_cdss
                                         - request_integration
                                         - request_conformation
+                                usecase_proceeding:        
+                                    title: codice della fattispecie presente nel Catalogo
+                                    type: string
+                                    minLength: 1
                                 error:
                                     $ref: "#/components/schemas/Error"
 
@@ -50,6 +54,8 @@ paths:
                     $ref: "#/components/responses/BadRequest"
                 "401":
                     $ref: "#/components/responses/Unauthorized"
+                "404":
+                    $ref: "#/components/responses/NotFound"
                 "500":
                     $ref: "#/components/responses/ServerError"
                 "503":
@@ -201,6 +207,15 @@ components:
 
         BadRequest:
             description: Forma della richiesta non conforme alla specifica
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/Error"
+            headers:
+                Agid-JWT-Signature:
+                    $ref: "#/components/headers/Agid-JWT-Signature"
+        NotFound:
+            description: risorsa non trovata
             content:
                 application/json:
                     schema:
