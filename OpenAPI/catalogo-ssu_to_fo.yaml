@@ -190,7 +190,7 @@ components:
           - context
           - sub_context
           - data
-          - progressive
+          - progressivo
           - uuid
       properties:
           context:
@@ -203,7 +203,7 @@ components:
           sub_context:
               title: Specificità del contesto (es. SUE Produttivo, SUE Residenziale)
               type: string
-          progressive:
+          progressivo:
               title: numero progressivo a rotazione annuale
               type: string
 
