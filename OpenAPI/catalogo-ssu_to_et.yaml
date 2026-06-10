@@ -64,6 +64,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         "401":
           $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
         "500":
           $ref: "#/components/responses/ServerError"
         "503":
@@ -84,12 +86,6 @@ components:
       headers:
         Agid-JWT-Signature:
           $ref: "#/components/headers/Agid-JWT-Signature"
-    OKRequest:
-      description: Richiesta completata con successo
-      headers:
-        Agid-JWT-Signature:
-          $ref: "#/components/headers/Agid-JWT-Signature"
-    
     OKAuditResponse:
       description: Richiesta di Audit completata con successo
       headers:
@@ -128,6 +124,17 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/Error"
+    
+    NotFound:
+      description: risorsa non trovata
+      headers:
+        Agid-JWT-Signature:
+          $ref: "#/components/headers/Agid-JWT-Signature"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+            
     ServerError:
       description: Errore processamento richiesta
       content:
@@ -190,7 +197,7 @@ components:
 
         message:
           type: string
-          pattern: ^instance_retrived|integration_requested_from_[0-9]{1,10}|instance_integrated_retrived|suspension_requested_from_[0-9]{1,10}|conformation_requested_from_[0-9]{1,10}|cdss_requested_from_[0-9]{1,10}|positive_outcome_sended_from_[0-9]{1,10}|generic_conclusion_sended_from_[0-9]{1,10}|retry_requested_for_send_instance|retry_requested_for_notify|negative_outcome_sended_from_[0-9]{1,10}|instance_conformated_retrieved$
+          pattern: instance_retrived_from_[0-9]{1,10}|integration_requested_from_[0-9]{1,10}|instance_integrated_retrived|suspension_requested_from_[0-9]{1,10}|conformation_requested_from_[0-9]{1,10}|cdss_requested_from_[0-9]{1,10}|positive_outcome_sended_from_[0-9]{1,10}|generic_conclusion_sended_from_[0-9]{1,10}|retry_requested_for_send_instance|retry_requested_for_notify|retry_requested_for_send_conclusions|retry_requested_for_request_cdss|retry_requested_for_request_integration|retry_requested_for_request_conformation|negative_outcome_sended_from_[0-9]{1,10}|instance_conformated_retrieved$
 
         event_time:
           title: timestamp del momento in cui si è verificato l'evento
