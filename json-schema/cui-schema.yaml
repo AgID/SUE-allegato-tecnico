@@ -7,7 +7,7 @@ required:
 - context
 - sub_context
 - data
-- progressive
+- progressivo
 - uuid
 properties:
   context:
@@ -22,8 +22,8 @@ properties:
     title: data emissione cui
     type: string
     format: date
-  progressive:
-    "$id": "#root/cui/progressive"
+  progressivo:
+    "$id": "#root/cui/progressivo"
     title: numero progressivo a rotazione annuale
     type: string
   uuid:
