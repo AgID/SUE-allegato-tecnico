@@ -91,7 +91,7 @@ paths:
                                     type: string
                                     enum:
                                         - send_instance
-                                        - notify_receipt
+                                        - notify
                                 error:
                                     $ref: "#/components/schemas/Error"
 
