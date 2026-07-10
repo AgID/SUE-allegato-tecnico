@@ -92,7 +92,6 @@ paths:
                                     enum:
                                         - send_instance
                                         - notify_receipt
-                                        - instance-document
                                 error:
                                     $ref: "#/components/schemas/Error"
 
