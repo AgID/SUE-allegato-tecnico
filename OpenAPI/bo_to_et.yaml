@@ -444,6 +444,19 @@ components:
                                         requester_administration:
                                             title: amministrazione richiedente
                                             $ref: "#/components/schemas/AdministrationSchema"
+                            integration_document_list:
+                                type: array
+                                items:
+                                    type: object
+                                    required:
+                                        - requester_administration
+                                        - document
+                                    properties:
+                                        requester_administration:
+                                            title: amministrazione richiedente
+                                            $ref: "#/components/schemas/AdministrationSchema"
+                                        document:
+                                            $ref: "#/components/schemas/Document"
 
         RequestConformationRequest:
             allOf:
