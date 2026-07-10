@@ -128,7 +128,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: "#/components/schemas/RequestIntegrationRequest"
+                            $ref: "#/components/schemas/IntegrationRequest"
                 required: true
             responses:
                 "200":
@@ -152,7 +152,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: "#/components/schemas/RequestConformationRequest"
+                            $ref: "#/components/schemas/ConformationRequest"
                 required: true
             responses:
                 "200":
@@ -404,7 +404,8 @@ components:
             required:
                 - code
                 - message
-        RequestIntegrationRequest:
+
+        IntegrationRequest:
             type: object
             required:
                 - cui
@@ -458,17 +459,59 @@ components:
                                         document:
                                             $ref: "#/components/schemas/Document"
 
-        RequestConformationRequest:
-            allOf:
-                - $ref: "#/components/schemas/RequestIntegrationRequest"
-                - type: object
-                  required:
-                  - expirationDate
-                  properties:
-                    expirationDate:
+        ConformationRequest:
+            type: object
+            required:
+                - cui
+                - instance_descriptor_version
+                - expirationDate
+                - conformation_list
+            properties:
+                cui:
+                    $ref: "#/components/schemas/cui"
+                instance_descriptor_version:
+                    type: string
+                expirationDate:
                         title: data di scadenza concessa al presentatore per inoltrare la documentazione relativa alla richiesta di conformazione
                         type: string
                         format: date
+                conformation_list:
+                    type: array
+                    items:
+                        type: object
+                        required:
+                            - code
+                            - conformation_request
+                        properties:
+                            code:
+                                title: codice della fattispecie presente nel Catalogo
+                                type: string
+                                minLength: 1
+                            ref:
+                                title: riferimento all'elemento dell'istanza relativo al procedimento (procedimento o allegato)
+                                type: string
+                                minLength: 1
+                            conformation_request:
+                                title: elenco conformazioni richieste da uno o più enti terzi
+                                type: array
+                                items:
+                                    type: object
+                                    properties:
+                                        request:
+                                            title: testo conformazione richiesta
+                                            type: string
+                                        requester_administration:
+                                            title: amministrazione richiedente
+                                            $ref: "#/components/schemas/AdministrationSchema"
+                            conformation_document_list:
+                                type: array
+                                items:
+                                    type: object
+                                    required:
+                                        - document
+                                    properties:
+                                        document:
+                                            $ref: "#/components/schemas/Document"
 
         SendConclusionRequests:
             type: object
