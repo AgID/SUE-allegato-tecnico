@@ -37,7 +37,8 @@ paths:
                                     description: operation per la quale si richiede la ritrasmissione
                                     type: string
                                     enum:
-                                        - instance-document
+                                        - send_instance
+                                        - notify
                                 error:
                                     $ref: "#/components/schemas/Error"
 
