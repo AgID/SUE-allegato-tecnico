@@ -75,7 +75,42 @@ paths:
                 - bearerAuth: []
                   Agid-JWT-Signature: []
 
-        
+    /retry:
+        post:
+            description: Richiesta di ritrasmissione dati relativi ad una specifica operation a causa di incoerenze riscontrate sui dati ricevuti.
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                cui:
+                                    $ref: "#/components/schemas/cui"
+                                operation:
+                                    description: operation per la quale si richiede la ritrasmissione
+                                    type: string
+                                    enum:
+                                        - instance-document
+                                error:
+                                    $ref: "#/components/schemas/Error"
+
+            responses:
+                "200":
+                    $ref: "#/components/responses/OKRequest"
+                "400":
+                    $ref: "#/components/responses/BadRequest"
+                "401":
+                    $ref: "#/components/responses/Unauthorized"
+                "404":
+                    $ref: "#/components/responses/NotFound"
+                "500":
+                    $ref: "#/components/responses/ServerError"
+                "503":
+                    $ref: "#/components/responses/ServiceUnavailable"
+
+            security:
+                - bearerAuth: []
+                  Agid-JWT-Signature: []    
 
 
 components:
