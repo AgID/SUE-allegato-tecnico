@@ -128,7 +128,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: "#/components/schemas/RequestIntegrationRequest"
+                            $ref: "#/components/schemas/IntegrationRequest"
                 required: true
             responses:
                 "200":
@@ -152,7 +152,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: "#/components/schemas/RequestConformationRequest"
+                            $ref: "#/components/schemas/ConformationRequest"
                 required: true
             responses:
                 "200":
@@ -404,7 +404,8 @@ components:
             required:
                 - code
                 - message
-        RequestIntegrationRequest:
+
+        IntegrationRequest:
             type: object
             required:
                 - cui
@@ -444,42 +445,73 @@ components:
                                         requester_administration:
                                             title: amministrazione richiedente
                                             $ref: "#/components/schemas/AdministrationSchema"
+                            integration_document_list:
+                                type: array
+                                items:
+                                    type: object
+                                    required:
+                                        - requester_administration
+                                        - document
+                                    properties:
+                                        requester_administration:
+                                            title: amministrazione richiedente
+                                            $ref: "#/components/schemas/AdministrationSchema"
+                                        document:
+                                            $ref: "#/components/schemas/Document"
 
-                integration_document_list:
-                    type: array
-                    items:
-                        type: object
-                        properties:
-                            requester_administration:
-                                title: amministrazione richiedente
-                                $ref: "#/components/schemas/AdministrationSchema"
-                            resource_id:
-                                title: id della risorsa "documento di richiesta integrazioni", univoco per erogatore e CUI.UUID
-                                type: string
-                                minLength: 1
-                            hash:
-                                title: hash risorsa
-                                type: string
-                                minLength: 1
-                            alg_hash:
-                                title: algoritmo hash applicato
-                                type: string
-                                enum:
-                                - S256
-                                - S384
-                                - S512
-
-        RequestConformationRequest:
-            allOf:
-                - $ref: "#/components/schemas/RequestIntegrationRequest"
-                - type: object
-                  required:
-                  - expirationDate
-                  properties:
-                    expirationDate:
+        ConformationRequest:
+            type: object
+            required:
+                - cui
+                - instance_descriptor_version
+                - expirationDate
+                - conformation_list
+            properties:
+                cui:
+                    $ref: "#/components/schemas/cui"
+                instance_descriptor_version:
+                    type: string
+                expirationDate:
                         title: data di scadenza concessa al presentatore per inoltrare la documentazione relativa alla richiesta di conformazione
                         type: string
                         format: date
+                conformation_list:
+                    type: array
+                    items:
+                        type: object
+                        required:
+                            - code
+                            - conformation_request
+                        properties:
+                            code:
+                                title: codice della fattispecie presente nel Catalogo
+                                type: string
+                                minLength: 1
+                            ref:
+                                title: riferimento all'elemento dell'istanza relativo al procedimento (procedimento o allegato)
+                                type: string
+                                minLength: 1
+                            conformation_request:
+                                title: elenco conformazioni richieste da uno o più enti terzi
+                                type: array
+                                items:
+                                    type: object
+                                    properties:
+                                        request:
+                                            title: testo conformazione richiesta
+                                            type: string
+                                        requester_administration:
+                                            title: amministrazione richiedente
+                                            $ref: "#/components/schemas/AdministrationSchema"
+                            conformation_document_list:
+                                type: array
+                                items:
+                                    type: object
+                                    required:
+                                        - document
+                                    properties:
+                                        document:
+                                            $ref: "#/components/schemas/Document"
 
         SendConclusionRequests:
             type: object
@@ -511,21 +543,8 @@ components:
                 requester_administration:
                     title: amministrazione richiedente
                     $ref: "#/components/schemas/AdministrationSchema"
-                resource_id:
-                    title: id della risorsa "documento di esito negativo", univoco per erogatore e CUI.UUID
-                    type: string
-                    minLength: 1
-                hash:
-                    title: hash risorsa
-                    type: string
-                    minLength: 1
-                alg_hash:
-                    title: algoritmo hash applicato
-                    type: string
-                    enum:
-                    - S256
-                    - S384
-                    - S512
+                document:
+                    $ref: "#/components/schemas/Document"
             example:
                 conclusions_type: "negative_outcome"
                 cui: 
@@ -541,9 +560,13 @@ components:
                     officecode: "string"
                     version: "00.00.00"
                     description: "string" 
-                resource_id: "string"
-                hash: "string"
-                alg_hash: "S256"
+                document:
+                    resource_id: "string"
+                    filename: "string"
+                    mime_type: "application/pdf"
+                    file_size: 1024
+                    hash: "string"
+                    alg_hash: "S256"
                 
         PositiveOutcome:
             required:
@@ -567,21 +590,8 @@ components:
                 requester_administration:
                     title: amministrazione richiedente
                     $ref: "#/components/schemas/AdministrationSchema"
-                resource_id:
-                    title: id della risorsa "documento di parere positivo", univoco per erogatore e CUI.UUID
-                    type: string
-                    minLength: 1
-                hash:
-                    title: hash risorsa
-                    type: string
-                    minLength: 1
-                alg_hash:
-                    title: algoritmo hash applicato
-                    type: string
-                    enum:
-                    - S256
-                    - S384
-                    - S512
+                document:
+                    $ref: "#/components/schemas/Document"
 
         GenericConclusion:
             required:
@@ -606,10 +616,34 @@ components:
                 requester_administration:
                     title: amministrazione richiedente
                     $ref: "#/components/schemas/AdministrationSchema"
+                document:
+                    $ref: "#/components/schemas/Document"
+
+        Document:
+            type: object
+            required:
+            - resource_id
+            - mime_type
+            - hash
+            - alg_hash
+            properties:
                 resource_id:
-                    title: id della risorsa "documento di conclusione", univoco per erogatore e CUI.UUID
+                    title: id della risorsa del documento
                     type: string
                     minLength: 1
+                filename:
+                    title: filename della risorsa del documento
+                    type: string
+                    minLength: 1
+                mime_type:
+                    title: indica il formato dei dati previsto per il documento
+                    type: string
+                    enum:
+                    - application/pdf
+                    - application/pkcs7-mime
+                file_size:
+                    description: dimensione del file
+                    type: integer
                 hash:
                     title: hash risorsa
                     type: string
