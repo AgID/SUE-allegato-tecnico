@@ -1,7 +1,7 @@
 openapi: 3.0.3
 
 info:
-    title: RegistroImprese to BackOffice SUAP
+    title: RegistroImprese to BackOffice SUE
 
     version: 1.0.0
 
@@ -186,8 +186,24 @@ components:
                 uuid:
                     title: UUID chiave del CUI
                     type: string
+        
+        Tag:
+            description: struttura oggetto Tag
+            type: object
+            required:
+              - tag_key
+              - tag_value
+            properties:
+              tag_key:
+                title: Chiave del Tag di classificazione associato ad un documento
+                type: string
+                example: "SottoProcedimento"
+              tag_value:
+                title: Valore del Tag di classificazione associato ad un documento
+                type: string
+                example: "AUA"
 
-        InstanceIndex:
+        InstanceIndexFII:
             type: array
             description: indice istanza
             items:
@@ -197,6 +213,7 @@ components:
                 - ref
                 - description
                 - resource_id
+                - document_classification_coding
                 - hash
                 - alg_hash
                 properties:
@@ -212,10 +229,37 @@ components:
                         title: descrizione della risorsa
                         type: string
                         minLength: 1
+                    filename:                      
+                        title: filename della risorsa documento correlata all'evento notificato
+                        type: string
+                        minLength: 1
+                    file_size:
+                        description: Dimensione del file.
+                        type: integer
+                    mime_type:
+                        type: string
+                        enum: 
+                            - application/pdf
+                            - application/xml
+                            - application/pkcs7-mime
                     resource_id:                            
                         title: id della risorsa, univoco per erogatore e CUI.UUID
                         type: string
                         minLength: 1
+                    document_classification_coding:
+                      title: Codifica della classificazione associata ad un documento
+                      description: La classificazione viene recuperata dal Catalogo SSU, tuttavia, resta in capo al Back-Office la responsabilità di tale associazione e, qualora venga ritenuto opportuno, può ad ogni modo apportare una correzione. I valori ammissibili sono recuperabili al path catalogo-ssu_meta/document_classifications.
+                      type: string
+                      pattern: "C[0-9]{1,2}_[a-z]"
+                    tags: 
+                      description: Tag associati al documento.
+                      type: array
+                      items:
+                          $ref: '#/components/schemas/Tag'
+                    validity:
+                      description: Validità del documento espressa in formato "date".
+                      type: string
+                      format: date
                     hash:                            
                         title: hash dell'elemento dell'istanza relativo al procedimento
                         type: string
@@ -227,6 +271,7 @@ components:
                         - S256
                         - S384
                         - S512
+
         Resources: 
             type: array
             description: array delle risorse
@@ -260,152 +305,342 @@ components:
                         title: descrizione della risorsa
                         type: string
                         minLength: 1
-        GeneralIndex:
+
+        GeneralIndexFII:
             type: array
             description: indice allegati trasversali (da utilizzare solo in caso di Edilizia Produttiva avviata direttamente sul SUE)
             minItems: 0
             uniqueItems: true
             items:
-                anyOf:
-                    - $ref: '#/components/schemas/ricevuta_xml'
-                    - $ref: '#/components/schemas/ricevuta_pdf'
-                    - $ref: '#/components/schemas/suap_xml'
-                    - $ref: '#/components/schemas/suap_pdf'
-                            
-        ricevuta_xml:
-                      type: object
-                      description: il presente documento è validato con l’XML Schema definito ai sensi dell’allegato al DPR 160/2010
-                        precedente alla variazione DECRETO 12 novembre 2021 recuperabile nella sezione regole “Regole tecniche”
-                        del portale impresainungiorno
-                        (https://www.impresainungiorno.gov.it/documents/155997/157492/SUAP-ricevuta-1.1.4.xsd/58b9d8e8-2b76-4b8b-adee-0cf9c2bbe04a)
-                      additionalProperties: false
-                      required:
-                        - name
-                        - mime_type
-                        - resource_id
-                        - hash
-                        - alg_hash
-                      properties:
-                        name:
-                          type: string
-                          enum:
-                            - RICEVUTA_XML
-                        mime_type:
-                          type: string
-                          enum:
-                            - application/xml
-                            - application/pkcs7-mime
-                        resource_id:
-                          type: string
-                          minLength: 1
-                        hash:
-                          type: string
-                          minLength: 1
-                        alg_hash:
-                          type: string
-                          enum:
-                            - S256
-                            - S384
-                            - S512
-        ricevuta_pdf:
-                      type: object
-                      additionalProperties: false
-                      required:
-                        - name
-                        - mime_type
-                        - resource_id
-                        - hash
-                        - alg_hash
-                      properties:
-                        name:
-                          type: string
-                          enum:
-                            - RICEVUTA_PDF
-                        mime_type:
-                          type: string
-                          enum:
-                            - application/pdf
-                            - application/pkcs7-mime
-                        resource_id:
-                          type: string
-                          minLength: 1
-                        hash:
-                          type: string
-                          minLength: 1
-                        alg_hash:
-                          type: string
-                          enum:
-                            - S256
-                            - S384
-                            - S512
-        suap_xml:
-                      type: object
-                      description: il presente documento è validato con l’XML Schema definito ai sensi dell’allegato al DPR 160/2010
-                        precedente alla variazione DECRETO 12 novembre 2021 recuperabile nella sezione regole “Regole tecniche”
-                        del portale impresainungiorno
-                        (https://www.impresainungiorno.gov.it/documents/155997/157492/pratica_suap-2.0.0.xsd/74b7ffb2-fe01-41c6-b210-be36139923e4 , 
-                        https://www.impresainungiorno.gov.it/documents/155997/157492/Definizione+delle+strutture+dati+elementari+di+impresainungiorno.xsd/43929369-48f0-4b7b-883e-f57dc5cdd41e)
-                      additionalProperties: false
-                      required:
-                        - name
-                        - mime_type
-                        - resource_id
-                        - hash
-                        - alg_hash
-                      properties:
-                        name:
-                          type: string
-                          enum:
-                            - SUAP_XML
-                        mime_type:
-                          type: string
-                          enum:
-                            - application/xml
-                            - application/pkcs7-mime
-                        resource_id:
-                          type: string
-                          minLength: 1
-                        hash:
-                          type: string
-                          minLength: 1
-                        alg_hash:
-                          type: string
-                          enum:
-                            - S256
-                            - S384
-                            - S512
-        suap_pdf:
-                      type: object
-                      additionalProperties: false
-                      required:
-                        - name
-                        - mime_type
-                        - resource_id
-                        - hash
-                        - alg_hash
-                      properties:
-                        name:
-                          type: string
-                          enum:
-                            - SUAP_PDF
-                        mime_type:
-                          type: string
-                          enum:
-                            - application/pdf
-                            - application/pkcs7-mime
-                        resource_id:
-                          type: string
-                          minLength: 1
-                        hash:
-                          type: string
-                          minLength: 1
-                        alg_hash:
-                          type: string
-                          enum:
-                            - S256
-                            - S384
-                            - S512
+              anyOf:
+                - $ref: '#/components/schemas/ricevuta_xml_fii'
+                - $ref: '#/components/schemas/ricevuta_pdf_fii'
+                - $ref: '#/components/schemas/suap_xml_fii'
+                - $ref: '#/components/schemas/suap_pdf_fii'
+                - $ref: '#/components/schemas/suap_rea_start_xml_fii'
+                - $ref: '#/components/schemas/suap_rea_update_xml_fii'
 
+        ricevuta_xml_fii:
+            type: object
+            description: il presente documento è validato con l’XML Schema definito ai sensi dell’allegato al DPR 160/2010
+              precedente alla variazione DECRETO 12 novembre 2021 recuperabile nella sezione regole “Regole tecniche”
+              del portale impresainungiorno
+              (https://www.impresainungiorno.gov.it/documents/155997/157492/SUAP-ricevuta-1.1.4.xsd/58b9d8e8-2b76-4b8b-adee-0cf9c2bbe04a)
+            additionalProperties: false
+            required:
+              - name
+              - mime_type
+              - resource_id
+              - document_classification_coding
+              - hash
+              - alg_hash
+            properties:
+              name:
+                type: string
+                enum:
+                  - RICEVUTA_XML
+              mime_type:
+                type: string
+                enum:
+                  - application/xml
+                  - application/pkcs7-mime
+              resource_id:
+                type: string
+                minLength: 1
+              document_classification_coding:
+                  title: Codifica della classificazione associata ad un documento
+                  description: La classificazione viene recuperata dal Catalogo SSU, tuttavia, resta in capo al Back-Office la responsabilità di tale associazione e, qualora venga ritenuto opportuno, può ad ogni modo apportare una correzione. I valori ammissibili sono recuperabili al path catalogo-ssu_meta/document_classifications.
+                  type: string
+                  pattern: "C[0-9]{1,2}_[a-z]"
+              tags: 
+                description: Tag associati al documento.
+                type: array
+                items:
+                    $ref: '#/components/schemas/Tag'
+              hash:
+                type: string
+                minLength: 1
+              alg_hash:
+                type: string
+                enum:
+                  - S256
+                  - S384
+                  - S512
+
+        ricevuta_pdf_fii:
+            type: object
+            additionalProperties: false
+            required:
+              - name
+              - mime_type
+              - resource_id
+              - document_classification_coding
+              - hash
+              - alg_hash
+            properties:
+              name:
+                type: string
+                enum:
+                  - RICEVUTA_PDF
+              mime_type:
+                type: string
+                enum:
+                  - application/pdf
+                  - application/pkcs7-mime
+              resource_id:
+                type: string
+                minLength: 1
+              document_classification_coding:
+                  title: Codifica della classificazione associata ad un documento
+                  description: La classificazione viene recuperata dal Catalogo SSU, tuttavia, resta in capo al Back-Office la responsabilità di tale associazione e, qualora venga ritenuto opportuno, può ad ogni modo apportare una correzione. I valori ammissibili sono recuperabili al path catalogo-ssu_meta/document_classifications.
+                  type: string
+                  pattern: "C[0-9]{1,2}_[a-z]"
+              tags: 
+                description: Tag associati al documento.
+                type: array
+                items:
+                    $ref: '#/components/schemas/Tag'
+              hash:
+                type: string
+                minLength: 1
+              alg_hash:
+                type: string
+                enum:
+                  - S256
+                  - S384
+                  - S512
+
+        suap_xml_fii:
+            type: object
+            description: il presente documento è validato con l’XML Schema definito ai sensi dell’allegato al DPR 160/2010
+              precedente alla variazione DECRETO 12 novembre 2021 recuperabile nella sezione regole “Regole tecniche”
+              del portale impresainungiorno
+              (https://www.impresainungiorno.gov.it/documents/155997/157492/pratica_suap-2.0.0.xsd/74b7ffb2-fe01-41c6-b210-be36139923e4 , 
+              https://www.impresainungiorno.gov.it/documents/155997/157492/Definizione+delle+strutture+dati+elementari+di+impresainungiorno.xsd/43929369-48f0-4b7b-883e-f57dc5cdd41e)
+            additionalProperties: false
+            required:
+              - name
+              - mime_type
+              - resource_id
+              - document_classification_coding
+              - hash
+              - alg_hash
+            properties:
+              name:
+                type: string
+                enum:
+                  - SUAP_XML
+              mime_type:
+                type: string
+                enum:
+                  - application/xml
+                  - application/pkcs7-mime
+              resource_id:
+                type: string
+                minLength: 1
+              document_classification_coding:
+                  title: Codifica della classificazione associata ad un documento
+                  description: La classificazione viene recuperata dal Catalogo SSU, tuttavia, resta in capo al Back-Office la responsabilità di tale associazione e, qualora venga ritenuto opportuno, può ad ogni modo apportare una correzione. I valori ammissibili sono recuperabili al path catalogo-ssu_meta/document_classifications.
+                  type: string
+                  pattern: "C[0-9]{1,2}_[a-z]"
+              tags: 
+                description: Tag associati al documento.
+                type: array
+                items:
+                    $ref: '#/components/schemas/Tag'
+              hash:
+                type: string
+                minLength: 1
+              alg_hash:
+                type: string
+                enum:
+                  - S256
+                  - S384
+                  - S512
+
+        suap_pdf_fii:
+            type: object
+            additionalProperties: false
+            required:
+              - name
+              - mime_type
+              - resource_id
+              - document_classification_coding
+              - hash
+              - alg_hash
+            properties:
+              name:
+                type: string
+                enum:
+                  - SUAP_PDF
+              mime_type:
+                type: string
+                enum:
+                  - application/pdf
+                  - application/pkcs7-mime
+              resource_id:
+                type: string
+                minLength: 1
+              document_classification_coding:
+                  title: Codifica della classificazione associata ad un documento
+                  description: La classificazione viene recuperata dal Catalogo SSU, tuttavia, resta in capo al Back-Office la responsabilità di tale associazione e, qualora venga ritenuto opportuno, può ad ogni modo apportare una correzione. I valori ammissibili sono recuperabili al path catalogo-ssu_meta/document_classifications.
+                  type: string
+                  pattern: "C[0-9]{1,2}_[a-z]"
+              tags: 
+                description: Tag associati al documento.
+                type: array
+                items:
+                    $ref: '#/components/schemas/Tag'
+              hash:
+                type: string
+                minLength: 1
+              alg_hash:
+                type: string
+                enum:
+                  - S256
+                  - S384
+                  - S512
+
+        suap_rea_start_xml_fii:
+            type: object
+            description: il presente documento è validato con l’XML Schema definito ai sensi dell’allegato al DPR 160/2010
+              precedente alla variazione DECRETO 12 novembre 2021 recuperabile nella sezione regole “Regole tecniche”
+              del portale impresainungiorno
+              (https://www.impresainungiorno.gov.it/documents/155997/157488/suap-rea-1.1.1.xsd/2094658b-c981-4795-8d18-ffa91fa97069)
+            additionalProperties: false
+            required:
+              - name
+              - mime_type
+              - resource_id
+              - document_classification_coding
+              - hash
+              - alg_hash
+            properties:
+              name:
+                type: string
+                enum:
+                  - SUAP_REA_START_XML
+              mime_type:
+                type: string
+                enum:
+                  - application/xml
+                  - application/pkcs7-mime
+              resource_id:
+                type: string
+                minLength: 1
+              document_classification_coding:
+                  title: Codifica della classificazione associata ad un documento
+                  description: La classificazione viene recuperata dal Catalogo SSU, tuttavia, resta in capo al Back-Office la responsabilità di tale associazione e, qualora venga ritenuto opportuno, può ad ogni modo apportare una correzione. I valori ammissibili sono recuperabili al path catalogo-ssu_meta/document_classifications.
+                  type: string
+                  pattern: "C[0-9]{1,2}_[a-z]"
+              tags: 
+                description: Tag associati al documento.
+                type: array
+                items:
+                    $ref: '#/components/schemas/Tag'
+              hash:
+                type: string
+                minLength: 1
+              alg_hash:
+                type: string
+                enum:
+                  - S256
+                  - S384
+                  - S512
+
+        suap_rea_update_xml_fii:
+            type: object
+            description: il presente documento è validato con l’XML Schema definito ai sensi dell’allegato al DPR 160/2010
+              precedente alla variazione DECRETO 12 novembre 2021 recuperabile nella sezione regole “Regole tecniche”
+              del portale impresainungiorno
+              (https://www.impresainungiorno.gov.it/documents/155997/157488/suap-rea-1.1.1.xsd/2094658b-c981-4795-8d18-ffa91fa97069)
+            additionalProperties: false
+            required:
+              - name
+              - mime_type
+              - resource_id
+              - document_classification_coding
+              - hash
+              - alg_hash
+            properties:
+              name:
+                type: string
+                enum:
+                  - SUAP_REA_UPDATE_XML
+              mime_type:
+                type: string
+                enum:
+                  - application/xml
+                  - application/pkcs7-mime
+              resource_id:
+                type: string
+                minLength: 1
+              document_classification_coding:
+                  title: Codifica della classificazione associata ad un documento
+                  description: La classificazione viene recuperata dal Catalogo SSU, tuttavia, resta in capo al Back-Office la responsabilità di tale associazione e, qualora venga ritenuto opportuno, può ad ogni modo apportare una correzione. I valori ammissibili sono recuperabili al path catalogo-ssu_meta/document_classifications.
+                  type: string
+                  pattern: "C[0-9]{1,2}_[a-z]"
+              tags: 
+                description: Tag associati al documento.
+                type: array
+                items:
+                    $ref: '#/components/schemas/Tag'
+              hash:
+                type: string
+                minLength: 1
+              alg_hash:
+                type: string
+                enum:
+                  - S256
+                  - S384
+                  - S512
+  
+        suap_rea_end_fii:
+            type: object
+            additionalProperties: false
+            required:
+              - name
+              - mime_type
+              - resource_id
+              - document_classification_coding
+              - hash
+              - alg_hash
+            properties:
+              name:
+                type: string
+                enum:
+                  - SUAP_REA_UPDATE_XML
+              mime_type:
+                type: string
+                enum:
+                  - application/xml
+                  - application/pkcs7-mime
+              resource_id:
+                title: id della risorsa documento correlata all'xml del rea_end
+                type: string
+                minLength: 1
+              document_classification_coding:
+                  title: Codifica della classificazione associata ad un documento
+                  description: La classificazione viene recuperata dal Catalogo SSU, tuttavia, resta in capo al Back-Office la responsabilità di tale associazione e, qualora venga ritenuto opportuno, può ad ogni modo apportare una correzione. I valori ammissibili sono recuperabili al path catalogo-ssu_meta/document_classifications.
+                  type: string
+                  pattern: "C[0-9]{1,2}_[a-z]"
+              tags: 
+                description: Tag associati al documento.
+                type: array
+                items:
+                    $ref: '#/components/schemas/Tag'
+              hash:
+                  title: hash risorsa
+                  type: string
+                  minLength: 1
+              alg_hash:
+                  title: algoritmo hash applicato
+                  type: string
+                  enum:
+                  - S256
+                  - S384
+                  - S512
+        
         Error:
             type: object
             description: codice e descrizione condizione di errore
@@ -423,19 +658,19 @@ components:
                 - cui
                 - instance_descriptor_version
                 - instance_status
-                - instance_index
+                - instance_index_fii
             type: object
             properties:
                 cui:
                     $ref: "#/components/schemas/cui"
                 instance_descriptor_version:
                     type: string
-                instance_index:
-                    $ref: "#/components/schemas/InstanceIndex"
+                instance_index_fii:
+                    $ref: "#/components/schemas/InstanceIndexFII"
                 resources:
                     oneOf:
                         - $ref: "#/components/schemas/Resources"
-                        - $ref: "#/components/schemas/GeneralIndex"
+                        - $ref: "#/components/schemas/GeneralIndexFII"
 
         NotifyMessage:
             type: object
@@ -456,6 +691,8 @@ components:
                         - end_by_integration_times_expired
                         - end_by_conformation_times_expired
                         - end_by_submitter_cancel_requested
+                resource_rea_end:
+                    $ref: "#/components/schemas/suap_rea_end_fii" 
 
         TransferOutcomeNotifyMessage:
             type: object
